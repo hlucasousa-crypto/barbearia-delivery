@@ -1,124 +1,77 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barbearia Delivery</title>
-
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-}
-
-header {
-  background: #000;
-  padding: 15px;
-  text-align: center;
-  font-size: 22px;
-}
-
-.container {
-  padding: 20px;
-}
-
-input, select, button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 6px;
-  border: none;
-  font-size: 16px;
-}
-
-button {
-  background: #e91e63;
-  color: white;
-  font-weight: bold;
-}
-
-.pedido {
-  background: #222;
-  padding: 10px;
-  border-radius: 6px;
-  margin-top: 10px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Agendamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+    }
+    input, select, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
 </head>
-
 <body>
 
-<header>💈 Barbearia Delivery</header>
+  <div class="box">
+    <h2>Agendar Serviço</h2>
 
-<div class="container">
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="text" id="endereco" placeholder="Endereço">
+    
+    <select id="servico">
+      <option value="">Escolha o serviço</option>
+      <option>Troca de bateria</option>
+      <option>Entrega de bateria</option>
+    </select>
 
-<h3>Agendar atendimento</h3>
+    <input type="date" id="data">
+    <input type="time" id="hora">
 
-<input id="nome" placeholder="Nome do cliente">
-<input id="telefone" placeholder="Telefone">
-<input id="endereco" placeholder="Endereço">
+    <button onclick="enviar()">Agendar pelo WhatsApp</button>
+  </div>
 
-<select id="servico">
-  <option value="">Escolha o serviço</option>
-  <option>Corte</option>
-  <option>Barba</option>
-  <option>Combo</option>
-</select>
+  <script>
+    function enviar() {
+      const nome = document.getElementById("nome").value;
+      const endereco = document.getElementById("endereco").value;
+      const servico = document.getElementById("servico").value;
+      const data = document.getElementById("data").value;
+      const hora = document.getElementById("hora").value;
 
-<input type="date" id="data">
-<input type="time" id="hora">
+      const texto =
+        `Agendamento:%0A` +
+        `Nome: ${nome}%0A` +
+        `Endereço: ${endereco}%0A` +
+        `Serviço: ${servico}%0A` +
+        `Data: ${data}%0A` +
+        `Hora: ${hora}`;
 
-<button onclick="salvarPedido()">Agendar</button>
-
-<h3>Meus agendamentos</h3>
-<div id="lista"></div>
-
-</div>
-
-<script>
-let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-
-function salvarPedido() {
-  const pedido = {
-    nome: nome.value,
-    telefone: telefone.value,
-    endereco: endereco.value,
-    servico: servico.value,
-    data: data.value,
-    hora: hora.value
-  };
-
-  pedidos.push(pedido);
-  localStorage.setItem("pedidos", JSON.stringify(pedidos));
-  listarPedidos();
-  alert("Agendamento realizado!");
-}
-
-function listarPedidos() {
-  lista.innerHTML = "";
-  pedidos.forEach((p, i) => {
-    lista.innerHTML += `
-      <div class="pedido">
-        <strong>${p.nome}</strong><br>
-        ${p.servico} - ${p.data} às ${p.hora}<br>
-        ${p.endereco}<br>
-        <button onclick="cancelar(${i})">Cancelar</button>
-      </div>
-    `;
-  });
-}
-
-function cancelar(i) {
-  pedidos.splice(i, 1);
-  localStorage.setItem("pedidos", JSON.stringify(pedidos));
-  listarPedidos();
-}
-
-listarPedidos();
-</script>
+      window.location.href =
+        "https://wa.me/5517992239338?text=" + texto;
+    }
+  </script>
 
 </body>
 </html>

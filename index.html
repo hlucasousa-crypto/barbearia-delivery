@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbearia Delivery</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #000;
+  padding: 15px;
+  text-align: center;
+  font-size: 22px;
+}
+
+.container {
+  padding: 20px;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+}
+
+button {
+  background: #e91e63;
+  color: white;
+  font-weight: bold;
+}
+
+.pedido {
+  background: #222;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>💈 Barbearia Delivery</header>
+
+<div class="container">
+
+<h3>Agendar atendimento</h3>
+
+<input id="nome" placeholder="Nome do cliente">
+<input id="telefone" placeholder="Telefone">
+<input id="endereco" placeholder="Endereço">
+
+<select id="servico">
+  <option value="">Escolha o serviço</option>
+  <option>Corte</option>
+  <option>Barba</option>
+  <option>Combo</option>
+</select>
+
+<input type="date" id="data">
+<input type="time" id="hora">
+
+<button onclick="salvarPedido()">Agendar</button>
+
+<h3>Meus agendamentos</h3>
+<div id="lista"></div>
+
+</div>
+
+<script>
+let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+
+function salvarPedido() {
+  const pedido = {
+    nome: nome.value,
+    telefone: telefone.value,
+    endereco: endereco.value,
+    servico: servico.value,
+    data: data.value,
+    hora: hora.value
+  };
+
+  pedidos.push(pedido);
+  localStorage.setItem("pedidos", JSON.stringify(pedidos));
+  listarPedidos();
+  alert("Agendamento realizado!");
+}
+
+function listarPedidos() {
+  lista.innerHTML = "";
+  pedidos.forEach((p, i) => {
+    lista.innerHTML += `
+      <div class="pedido">
+        <strong>${p.nome}</strong><br>
+        ${p.servico} - ${p.data} às ${p.hora}<br>
+        ${p.endereco}<br>
+        <button onclick="cancelar(${i})">Cancelar</button>
+      </div>
+    `;
+  });
+}
+
+function cancelar(i) {
+  pedidos.splice(i, 1);
+  localStorage.setItem("pedidos", JSON.stringify(pedidos));
+  listarPedidos();
+}
+
+listarPedidos();
+</script>
+
+</body>
+</html>

@@ -1,77 +1,179 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Agendamento</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-    }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 400px;
-      margin: auto;
-    }
-    input, select, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    button {
-      background: #25d366;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas Barbearia Delivery</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin:0; padding:0;
+}
+header {
+  background:#e91e63;
+  color:white;
+  text-align:center;
+  padding:25px;
+  font-size:24px;
+  font-weight:bold;
+}
+.container {
+  max-width:500px;
+  background:white;
+  margin:30px auto;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 15px #ccc;
+}
+input, select, button {
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  font-size:16px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+button {
+  background:#25d366;
+  color:white;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover {
+  background:#128c7e;
+}
+h3 {text-align:center;}
+hr {margin:15px 0;}
+.agendamento {
+  background:#f9f9f9;
+  padding:8px;
+  margin-bottom:5px;
+  border-radius:5px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cancel-btn {
+  background:red;
+  color:white;
+  border:none;
+  padding:3px 6px;
+  border-radius:4px;
+  cursor:pointer;
+}
+</style>
 </head>
 <body>
 
-  <div class="box">
-    <h2>Agendar Serviço</h2>
+<header>Lucas Barbearia Delivery 💈</header>
 
-    <input type="text" id="nome" placeholder="Seu nome">
-    <input type="text" id="endereco" placeholder="Endereço">
-    
-    <select id="servico">
-      <option value="">Escolha o serviço</option>
-      <option>Troca de bateria</option>
-      <option>Entrega de bateria</option>
-    </select>
+<div class="container">
+<h3>Agendar Serviço</h3>
 
-    <input type="date" id="data">
-    <input type="time" id="hora">
+<input id="nome" placeholder="Nome do cliente">
+<input id="telefone" placeholder="Telefone">
+<input id="endereco" placeholder="Endereço">
 
-    <button onclick="enviar()">Agendar pelo WhatsApp</button>
-  </div>
+<select id="servico">
+  <option value="" disabled selected>Escolha o serviço</option>
+  <option value="Corte">💇‍♂️ Corte - R$35</option>
+  <option value="Corte e Barba">💇‍♂️✂️ Corte e Barba - R$55</option>
+  <option value="Corte e Sobrancelha">💇‍♂️👁 Corte e Sobrancelha - R$40</option>
+  <option value="Corte, Barba e Sobrancelha">💇‍♂️✂️👁 Corte, Barba e Sobrancelha - R$65</option>
+</select>
 
-  <script>
-    function enviar() {
-      const nome = document.getElementById("nome").value;
-      const endereco = document.getElementById("endereco").value;
-      const servico = document.getElementById("servico").value;
-      const data = document.getElementById("data").value;
-      const hora = document.getElementById("hora").value;
+<select id="horario">
+  <option value="" disabled selected>Escolha o horário</option>
+</select>
 
-      const texto =
-        `Agendamento:%0A` +
-        `Nome: ${nome}%0A` +
-        `Endereço: ${endereco}%0A` +
-        `Serviço: ${servico}%0A` +
-        `Data: ${data}%0A` +
-        `Hora: ${hora}`;
+<button onclick="agendar()">Agendar</button>
+<hr>
+<h3>Agendamentos</h3>
+<div id="listaAgendamentos"></div>
+</div>
 
-      window.location.href =
-        "https://wa.me/5517992239338?text=" + texto;
-    }
-  </script>
+<script>
+// gerar horários das 7:00 até 21:00 com intervalos de 40 min
+function gerarHorarios() {
+  const select = document.getElementById("horario");
+  select.innerHTML = '<option value="" disabled selected>Escolha o horário</option>';
+  let hora = 7;
+  let min = 0;
+  while(hora<21 || (hora===21 && min===0)){
+    const h = hora.toString().padStart(2,'0');
+    const m = min.toString().padStart(2,'0');
+    const horarioStr = `${h}:${m}`;
+    select.innerHTML += `<option value="${horarioStr}">${horarioStr}</option>`;
+    min += 40;
+    if(min>=60){ hora++; min -=60;}
+  }
+}
+gerarHorarios();
+
+// carregar agendamentos do localStorage
+let agendamentos = JSON.parse(localStorage.getItem("agendamentos") || "[]");
+atualizarLista();
+
+function agendar(){
+  const nome = document.getElementById("nome").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const endereco = document.getElementById("endereco").value.trim();
+  const servico = document.getElementById("servico").value;
+  const horario = document.getElementById("horario").value;
+
+  if(!nome || !telefone || !endereco || !servico || !horario){
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  // verifica se horário já ocupado
+  if(agendamentos.find(a=>a.horario===horario)){
+    alert("Horário ocupado! Escolha outro.");
+    return;
+  }
+
+  const agendamento = {nome, telefone, endereco, servico, horario};
+  agendamentos.push(agendamento);
+  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+  atualizarLista();
+  alert("Agendamento confirmado!");
+}
+
+function atualizarLista(){
+  const div = document.getElementById("listaAgendamentos");
+  div.innerHTML = "";
+  agendamentos.sort((a,b)=>a.horario.localeCompare(b.horario));
+  agendamentos.forEach((a,i)=>{
+    const el = document.createElement("div");
+    el.className="agendamento";
+    el.innerHTML = `
+      ${a.horario} - ${a.nome} | ${a.servico}
+      <button class="cancel-btn" onclick="cancelar(${i})">Cancelar</button>
+    `;
+    div.appendChild(el);
+  });
+
+  // atualizar opções de horários
+  const select = document.getElementById("horario");
+  gerarHorarios();
+  agendamentos.forEach(a=>{
+    const option = select.querySelector(`option[value='${a.horario}']`);
+    if(option) option.disabled = true;
+  });
+}
+
+function cancelar(index){
+  if(confirm("Deseja realmente cancelar este agendamento?")){
+    agendamentos.splice(index,1);
+    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+    atualizarLista();
+  }
+}
+</script>
 
 </body>
 </html>

@@ -11,6 +11,8 @@ input, select { padding:10px; margin:5px; width:200px; }
 button { padding:10px 20px; margin-top:10px; background:#f39c12; border:none; cursor:pointer; }
 button:hover { background:#e67e22; }
 #confirmacao { margin-top:20px; font-size:20px; color:#00ff00; }
+#painel { margin-top:30px; text-align:left; max-width:500px; margin-left:auto; margin-right:auto; }
+.agendamento { background:#222; padding:10px; margin:5px 0; border-radius:8px; }
 </style>
 </head>
 <body>
@@ -21,10 +23,10 @@ button:hover { background:#e67e22; }
 <input type="text" id="telefone" placeholder="Telefone" required><br>
 
 <select id="servico">
-  <option value="Corte - 35">Corte – R$35</option>
-  <option value="Corte + Barba - 55">Corte + Barba – R$55</option>
-  <option value="Corte + Sobrancelha - 40">Corte + Sobrancelha – R$40</option>
-  <option value="Corte + Barba + Sobrancelha - 65">Corte + Barba + Sobrancelha – R$65</option>
+  <option value="Corte – R$35">Corte – R$35</option>
+  <option value="Corte + Barba – R$55">Corte + Barba – R$55</option>
+  <option value="Corte + Sobrancelha – R$40">Corte + Sobrancelha – R$40</option>
+  <option value="Corte + Barba + Sobrancelha – R$65">Corte + Barba + Sobrancelha – R$65</option>
 </select><br>
 
 <input type="date" id="data" required><br>
@@ -58,8 +60,15 @@ button:hover { background:#e67e22; }
 
 <div id="confirmacao"></div>
 
+<h2>Painel de Agendamentos (só você)</h2>
+<div id="painel"></div>
+
 <script>
-function enviarAgendamento() {
+// Lista para armazenar agendamentos
+let agendamentos = [];
+
+// Função de enviar agendamento
+function enviarAgendamento(){
   const nome = document.getElementById("nome").value;
   const telefone = document.getElementById("telefone").value;
   const servico = document.getElementById("servico").value;
@@ -71,9 +80,36 @@ function enviarAgendamento() {
     return;
   }
 
-  // Aqui vamos salvar no Google Sheets depois
-  // Por enquanto só mostra confirmação
+  // Verificar se já existe agendamento nesse dia/horário
+  const existe = agendamentos.some(a => a.data===data && a.horario===horario);
+  if(existe){
+    alert("⛔ Esse horário já está ocupado!");
+    return;
+  }
+
+  // Adicionar na lista
+  agendamentos.push({nome, telefone, servico, data, horario});
   document.getElementById("confirmacao").innerHTML = "✅ Agendamento feito com sucesso!";
+
+  // Limpar campos
+  document.getElementById("nome").value="";
+  document.getElementById("telefone").value="";
+  document.getElementById("data").value="";
+
+  // Atualizar painel
+  mostrarPainel();
+}
+
+// Função de mostrar painel
+function mostrarPainel(){
+  const painel = document.getElementById("painel");
+  painel.innerHTML = "";
+  agendamentos.forEach(a=>{
+    const div = document.createElement("div");
+    div.className="agendamento";
+    div.innerHTML = `Nome: ${a.nome}<br>Tel: ${a.telefone}<br>Serviço: ${a.servico}<br>Data: ${a.data} | Horário: ${a.horario}`;
+    painel.appendChild(div);
+  });
 }
 </script>
 

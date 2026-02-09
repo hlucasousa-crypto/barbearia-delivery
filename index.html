@@ -13,28 +13,16 @@ button {background:#0b8457; color:white; font-weight:bold; border:none; cursor:p
 button:hover {background:#065a3d;}
 h3 {text-align:center;}
 hr {margin:15px 0;}
-.agendamento {background:#f9f9f9; padding:8px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;}
-.agendamento span {color:green; font-weight:bold;}
-.aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold;}
-/* animação do ✅ */
-#confirmacao {
-    display:none;
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%) scale(0);
-    font-size:100px;
-    color:green;
-    z-index:9999;
-    transition: transform 0.5s ease;
-}
+.aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold; text-align:center;}
+option.ocupado {color:#aaa;}
+#confirmacao {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); font-size:100px; color:green; z-index:9999; transition: transform 0.5s ease;}
 </style>
 </head>
 <body>
 
 <header>Lucas Barbearia Delivery</header>
 
-<div class="container" id="agendamentoContainer">
+<div class="container">
 <h3>Agendar Serviço</h3>
 
 <div id="mensagemAviso"></div>
@@ -57,30 +45,17 @@ hr {margin:15px 0;}
 </select>
 
 <button id="btnAgendar" onclick="agendar()">Agendar</button>
-<hr>
-<button onclick="mostrarLogin()">Painel do Barbeiro</button>
-
-<div id="painel" style="display:none;">
-<h3>Digite a senha para acessar os agendamentos</h3>
-<input type="password" id="senha" placeholder="Senha">
-<button onclick="acessarPainel()">Entrar</button>
-<div id="listaAgendamentos" style="margin-top:15px;"></div>
-</div>
 </div>
 
-<!-- container do ✅ gigante -->
 <div id="confirmacao">✅</div>
 
 <script>
-// senha do barbeiro
-const SENHA = "1234";
-
-// data mínima para hoje
-document.getElementById("data").valueAsDate = new Date();
-document.getElementById("data").min = new Date().toISOString().split("T")[0];
-
 // carregar agendamentos do localStorage
 let agendamentos = JSON.parse(localStorage.getItem("agendamentos") || "[]");
+
+// definir data mínima para hoje
+document.getElementById("data").valueAsDate = new Date();
+document.getElementById("data").min = new Date().toISOString().split("T")[0];
 
 // gerar horários das 7:00 até 21:00 com intervalos de 40 min
 function gerarHorarios() {
@@ -92,52 +67,30 @@ function gerarHorarios() {
     const h = hora.toString().padStart(2,'0');
     const m = min.toString().padStart(2,'0');
     const horarioStr = `${h}:${m}`;
-    select.innerHTML += `<option value="${horarioStr}">${horarioStr}</option>`;
+
+    const ocupado = agendamentos.some(a=>a.data===document.getElementById("data").value && a.horario===horarioStr);
+    if(ocupado){
+      select.innerHTML += `<option value="${horarioStr}" class="ocupado" disabled>${horarioStr} (Ocupado)</option>`;
+    } else {
+      select.innerHTML += `<option value="${horarioStr}">${horarioStr}</option>`;
+    }
+
     min += 40;
     if(min>=60){ hora++; min -=60;}
   }
 }
 
-// atualizar lista e bloquear horários
-function atualizarLista(){
-  const div = document.getElementById("listaAgendamentos");
-  div.innerHTML = "";
-
-  // painel do barbeiro sempre mostra todos os agendamentos
-  agendamentos.sort((a,b)=>{
-    return a.data.localeCompare(b.data) || a.horario.localeCompare(b.horario);
-  });
-  agendamentos.forEach((a)=>{
-    const el = document.createElement("div");
-    el.className="agendamento";
-    el.innerHTML = `${a.data} ${a.horario} - ${a.nome} | ${a.servico} | ${a.telefone} | ${a.endereco} <span>✅ Agendado</span>`;
-    div.appendChild(el);
-  });
-
-  // gerar horários de novo
-  gerarHorarios();
-
+// atualizar aviso de agendamento do mesmo cliente no dia
+function atualizarAviso(){
+  const nome = document.getElementById("nome").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
   const dataSelecionada = document.getElementById("data").value;
-  const nomeCliente = document.getElementById("nome").value.trim();
-  const telefoneCliente = document.getElementById("telefone").value.trim();
   const avisoDiv = document.getElementById("mensagemAviso");
   avisoDiv.innerHTML = "";
   document.getElementById("btnAgendar").disabled = false;
 
-  // bloquear horários já ocupados
-  agendamentos.forEach(a=>{
-    if(a.data === dataSelecionada){
-      const option = document.getElementById("horario").querySelector(`option[value='${a.horario}']`);
-      if(option){
-        option.disabled = true;
-        option.textContent += " (Ocupado)";
-      }
-    }
-  });
-
-  // verificar se cliente já agendou naquele dia (baseado em nome ou telefone)
-  if(nomeCliente || telefoneCliente){
-    const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nomeCliente || a.telefone===telefoneCliente));
+  if(nome || telefone){
+    const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nome || a.telefone===telefone));
     if(agendamentoHoje){
       avisoDiv.innerHTML = `⚠️ Você já tem um horário agendado hoje às ${agendamentoHoje.horario}`;
       document.getElementById("btnAgendar").disabled = true;
@@ -145,12 +98,15 @@ function atualizarLista(){
   }
 }
 
-// listeners
-document.getElementById("data").addEventListener("change", atualizarLista);
-document.getElementById("nome").addEventListener("input", atualizarLista);
-document.getElementById("telefone").addEventListener("input", atualizarLista);
+// listeners para atualizar horários e avisos
+document.getElementById("data").addEventListener("change", ()=>{
+  gerarHorarios();
+  atualizarAviso();
+});
+document.getElementById("nome").addEventListener("input", atualizarAviso);
+document.getElementById("telefone").addEventListener("input", atualizarAviso);
 
-// agendar
+// função de agendamento
 function agendar(){
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
@@ -169,41 +125,21 @@ function agendar(){
     return;
   }
 
-  const agendamento = {nome, telefone, endereco, servico, horario, data};
-  agendamentos.push(agendamento);
+  agendamentos.push({nome, telefone, endereco, servico, horario, data});
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-  atualizarLista();
+  gerarHorarios();
+  atualizarAviso();
 
-  // animação de confirmação
+  // animação ✅ gigante
   const conf = document.getElementById("confirmacao");
   conf.style.display = "block";
   conf.style.transform = "translate(-50%, -50%) scale(0)";
   setTimeout(() => { conf.style.transform = "translate(-50%, -50%) scale(1.5)"; }, 50);
   setTimeout(() => {
     conf.style.transform = "translate(-50%, -50%) scale(0)";
-    setTimeout(() => { conf.style.display = "none"; }, 500);
+    setTimeout(()=>{ conf.style.display = "none"; },500);
   }, 2000);
 }
-
-// mostrar painel do barbeiro
-function mostrarLogin(){
-  document.getElementById("painel").style.display = "block";
-}
-
-// acessar painel
-function acessarPainel(){
-  const senha = document.getElementById("senha").value;
-  if(senha === SENHA){
-    alert("Acesso liberado! Você pode ver todos os agendamentos.");
-    atualizarLista();
-  } else {
-    alert("Senha incorreta!");
-  }
-}
-
-// gerar horários e atualizar lista ao carregar
-gerarHorarios();
-atualizarLista();
 </script>
 </body>
 </html>

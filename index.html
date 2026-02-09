@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -58,10 +57,10 @@ hr {margin:15px 0;}
 </div>
 
 <script>
-// senha simples do barbeiro
+// senha do barbeiro
 const SENHA = "1234";
 
-// data mínima para hoje
+// definir data mínima para hoje
 document.getElementById("data").valueAsDate = new Date();
 document.getElementById("data").min = new Date().toISOString().split("T")[0];
 
@@ -84,7 +83,7 @@ function gerarHorarios() {
   }
 }
 
-// atualizar lista e bloqueios
+// atualizar lista e bloquear horários
 function atualizarLista(){
   const div = document.getElementById("listaAgendamentos");
   div.innerHTML = "";
@@ -108,13 +107,6 @@ function atualizarLista(){
   avisoDiv.innerHTML = "";
   document.getElementById("btnAgendar").disabled = false;
 
-  // bloquear horário se cliente já tiver agendado no dia
-  const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nomeCliente || a.telefone===telefoneCliente));
-  if(agendamentoHoje){
-    avisoDiv.innerHTML = `⚠️ Você já tem um horário agendado hoje às ${agendamentoHoje.horario}`;
-    document.getElementById("btnAgendar").disabled = true;
-  }
-
   // bloquear horários já ocupados
   agendamentos.forEach(a=>{
     if(a.data === dataSelecionada){
@@ -125,6 +117,15 @@ function atualizarLista(){
       }
     }
   });
+
+  // verificar se cliente já agendou naquele dia (baseado em nome ou telefone)
+  if(nomeCliente || telefoneCliente){
+    const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nomeCliente || a.telefone===telefoneCliente));
+    if(agendamentoHoje){
+      avisoDiv.innerHTML = `⚠️ Você já tem um horário agendado hoje às ${agendamentoHoje.horario}`;
+      document.getElementById("btnAgendar").disabled = true;
+    }
+  }
 }
 
 // listeners
@@ -174,7 +175,7 @@ function acessarPainel(){
   }
 }
 
-// gerar horários ao carregar a página
+// gerar horários e atualizar lista ao carregar
 gerarHorarios();
 atualizarLista();
 

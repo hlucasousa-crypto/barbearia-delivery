@@ -16,6 +16,12 @@ hr {margin:15px 0;}
 .aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold; text-align:center;}
 option.ocupado {color:#aaa;}
 #confirmacao {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); font-size:100px; color:green; z-index:9999; transition: transform 0.5s ease;}
+#painel {display:none; max-width:800px; margin:20px auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 15px #aaa;}
+table {width:100%; border-collapse:collapse;}
+th, td {padding:10px; border:1px solid #ccc; text-align:left;}
+th {background:#1f1f2e; color:white;}
+.cancelar {background:#d9534f; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;}
+.cancelar:hover {background:#a94442;}
 </style>
 </head>
 <body>
@@ -49,21 +55,40 @@ option.ocupado {color:#aaa;}
 
 <div id="confirmacao">✅</div>
 
+<!-- Painel do dono -->
+<div id="painel">
+<h3>Painel de Agendamentos</h3>
+<table id="tabelaAgendamentos">
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Telefone</th>
+<th>Endereço</th>
+<th>Serviço</th>
+<th>Data</th>
+<th>Horário</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
 <script>
-// carregar agendamentos do localStorage
+// carregar agendamentos
 let agendamentos = JSON.parse(localStorage.getItem("agendamentos") || "[]");
 
-// pedir permissão de notificação
+// solicitar permissão de notificação
 if (Notification.permission !== "granted") {
   Notification.requestPermission();
 }
 
-// definir data mínima para hoje
+// definir data mínima
 const dataInput = document.getElementById("data");
 dataInput.valueAsDate = new Date();
 dataInput.min = new Date().toISOString().split("T")[0];
 
-// gerar horários das 7:00 até 21:00 com intervalos de 40 min
+// gerar horários
 function gerarHorarios(){
   const select = document.getElementById("horario");
   select.innerHTML = '<option value="" disabled selected>Escolha o horário</option>';
@@ -89,7 +114,7 @@ function gerarHorarios(){
   }
 }
 
-// atualizar aviso se o cliente já tiver agendamento
+// atualizar aviso do cliente
 function atualizarAviso(){
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
@@ -107,12 +132,42 @@ function atualizarAviso(){
   }
 }
 
-// listeners para atualizar horários e avisos
+// atualizar painel do dono
+function atualizarPainel(){
+  const tbody = document.querySelector("#tabelaAgendamentos tbody");
+  tbody.innerHTML = "";
+  agendamentos.forEach((a,index)=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${a.nome}</td>
+      <td>${a.telefone}</td>
+      <td>${a.endereco}</td>
+      <td>${a.servico}</td>
+      <td>${a.data}</td>
+      <td>${a.horario}</td>
+      <td><button class="cancelar" onclick="cancelar(${index})">Cancelar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// cancelar agendamento
+function cancelar(index){
+  if(confirm("Deseja realmente cancelar este agendamento?")){
+    agendamentos.splice(index,1);
+    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+    gerarHorarios();
+    atualizarAviso();
+    atualizarPainel();
+  }
+}
+
+// listeners
 dataInput.addEventListener("change", ()=>{ gerarHorarios(); atualizarAviso(); });
 document.getElementById("nome").addEventListener("input", atualizarAviso);
 document.getElementById("telefone").addEventListener("input", atualizarAviso);
 
-// função para agendar
+// função agendar
 function agendar(){
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
@@ -134,8 +189,9 @@ function agendar(){
   agendamentos.push({nome, telefone, endereco, servico, horario, data});
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
   
-  gerarHorarios(); // atualizar horários com os novos ocupados
+  gerarHorarios(); 
   atualizarAviso();
+  atualizarPainel();
 
   // animação ✅ gigante
   const conf = document.getElementById("confirmacao");
@@ -147,16 +203,23 @@ function agendar(){
     setTimeout(()=>{ conf.style.display = "none"; },500);
   }, 2000);
 
-  // notificação do navegador para você
+  // notificação para você
   if(Notification.permission === "granted"){
     new Notification("Novo agendamento!", {
-      body: `Cliente: ${nome}\nServiço: ${servico}\nData: ${data}\nHorário: ${horario}`,
-      icon: "https://i.imgur.com/1A3vL0G.png" // opcional, ícone do seu negócio
+      body: `Cliente: ${nome}\nServiço: ${servico}\nData: ${data}\nHorário: ${horario}`
     });
   }
 }
 
-// gerar horários ao carregar página
+// senha simples para mostrar painel (só você)
+const senhaPainel = "lucas123"; // coloque a senha que quiser
+let senha = prompt("Digite a senha do dono para ver o painel de agendamentos:");
+if(senha === senhaPainel){
+  document.getElementById("painel").style.display = "block";
+  atualizarPainel();
+}
+
+// inicialização
 gerarHorarios();
 atualizarAviso();
 </script>

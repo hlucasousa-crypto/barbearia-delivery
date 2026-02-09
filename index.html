@@ -1,227 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💈 Lucas Barbearia Delivery</title>
+<title>Lucas Barbearia Delivery</title>
 <style>
-body {font-family: Arial, sans-serif; background: #e0e0e0; margin:0; padding:0;}
-header {background:#1f1f2e; color:white; text-align:center; padding:25px; font-size:24px; font-weight:bold;}
-.container {max-width:500px; background:white; margin:30px auto; padding:20px; border-radius:10px; box-shadow:0 0 15px #aaa;}
-input, select, button {width:100%; padding:12px; margin-top:10px; font-size:16px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;}
-button {background:#0b8457; color:white; font-weight:bold; border:none; cursor:pointer; transition:0.3s;}
-button:hover {background:#065a3d;}
-h3 {text-align:center;}
-hr {margin:15px 0;}
-.aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold; text-align:center;}
-option.ocupado {color:#aaa;}
-#confirmacao {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); font-size:100px; color:green; z-index:9999; transition: transform 0.5s ease;}
-#painel {display:none; max-width:800px; margin:20px auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 15px #aaa;}
-table {width:100%; border-collapse:collapse;}
-th, td {padding:10px; border:1px solid #ccc; text-align:left;}
-th {background:#1f1f2e; color:white;}
-.cancelar {background:#d9534f; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;}
-.cancelar:hover {background:#a94442;}
+body { font-family: Arial; text-align:center; background:#1c1c1c; color:white; }
+h1 { color:#f39c12; }
+input, select { padding:10px; margin:5px; width:200px; }
+button { padding:10px 20px; margin-top:10px; background:#f39c12; border:none; cursor:pointer; }
+button:hover { background:#e67e22; }
+#confirmacao { margin-top:20px; font-size:20px; color:#00ff00; }
 </style>
 </head>
 <body>
+<h1>Lucas Barbearia Delivery</h1>
+<p>Agende seu horário:</p>
 
-<header>💈 Lucas Barbearia Delivery</header>
-
-<div class="container">
-<h3>Agendar Serviço</h3>
-
-<div id="mensagemAviso"></div>
-
-<input id="nome" placeholder="Nome do cliente">
-<input id="telefone" placeholder="Telefone">
-<input id="endereco" placeholder="Endereço">
+<input type="text" id="nome" placeholder="Nome" required><br>
+<input type="text" id="telefone" placeholder="Telefone" required><br>
 
 <select id="servico">
-  <option value="" disabled selected>Escolha o serviço</option>
-  <option value="Corte">Corte - R$35</option>
-  <option value="Corte e Barba">Corte e Barba - R$55</option>
-  <option value="Corte e Sobrancelha">Corte e Sobrancelha - R$40</option>
-  <option value="Corte, Barba e Sobrancelha">Corte, Barba e Sobrancelha - R$65</option>
-</select>
+  <option value="Corte - 35">Corte – R$35</option>
+  <option value="Corte + Barba - 55">Corte + Barba – R$55</option>
+  <option value="Corte + Sobrancelha - 40">Corte + Sobrancelha – R$40</option>
+  <option value="Corte + Barba + Sobrancelha - 65">Corte + Barba + Sobrancelha – R$65</option>
+</select><br>
 
-<input type="date" id="data" min="">
+<input type="date" id="data" required><br>
+
 <select id="horario">
-  <option value="" disabled selected>Escolha o horário</option>
-</select>
+  <option value="07:00">07:00</option>
+  <option value="07:40">07:40</option>
+  <option value="08:20">08:20</option>
+  <option value="09:00">09:00</option>
+  <option value="09:40">09:40</option>
+  <option value="10:20">10:20</option>
+  <option value="11:00">11:00</option>
+  <option value="11:40">11:40</option>
+  <option value="12:20">12:20</option>
+  <option value="13:00">13:00</option>
+  <option value="13:40">13:40</option>
+  <option value="14:20">14:20</option>
+  <option value="15:00">15:00</option>
+  <option value="15:40">15:40</option>
+  <option value="16:20">16:20</option>
+  <option value="17:00">17:00</option>
+  <option value="17:40">17:40</option>
+  <option value="18:20">18:20</option>
+  <option value="19:00">19:00</option>
+  <option value="19:40">19:40</option>
+  <option value="20:20">20:20</option>
+  <option value="21:00">21:00</option>
+</select><br>
 
-<button id="btnAgendar" onclick="agendar()">Agendar</button>
-</div>
+<button onclick="enviarAgendamento()">Agendar</button>
 
-<div id="confirmacao">✅</div>
-
-<!-- Painel do dono -->
-<div id="painel">
-<h3>Painel de Agendamentos</h3>
-<table id="tabelaAgendamentos">
-<thead>
-<tr>
-<th>Cliente</th>
-<th>Telefone</th>
-<th>Endereço</th>
-<th>Serviço</th>
-<th>Data</th>
-<th>Horário</th>
-<th>Ação</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
+<div id="confirmacao"></div>
 
 <script>
-// carregar agendamentos
-let agendamentos = JSON.parse(localStorage.getItem("agendamentos") || "[]");
-
-// solicitar permissão de notificação
-if (Notification.permission !== "granted") {
-  Notification.requestPermission();
-}
-
-// definir data mínima
-const dataInput = document.getElementById("data");
-dataInput.valueAsDate = new Date();
-dataInput.min = new Date().toISOString().split("T")[0];
-
-// gerar horários
-function gerarHorarios(){
-  const select = document.getElementById("horario");
-  select.innerHTML = '<option value="" disabled selected>Escolha o horário</option>';
-
-  const dataSelecionada = dataInput.value;
-  let hora = 7;
-  let min = 0;
-
-  while(hora<21 || (hora===21 && min===0)){
-    const h = hora.toString().padStart(2,'0');
-    const m = min.toString().padStart(2,'0');
-    const horarioStr = `${h}:${m}`;
-
-    const ocupado = agendamentos.some(a => a.data === dataSelecionada && a.horario === horarioStr);
-    if(ocupado){
-      select.innerHTML += `<option value="${horarioStr}" disabled class="ocupado">${horarioStr} (Ocupado)</option>`;
-    } else {
-      select.innerHTML += `<option value="${horarioStr}">${horarioStr}</option>`;
-    }
-
-    min += 40;
-    if(min>=60){ hora++; min -=60; }
-  }
-}
-
-// atualizar aviso do cliente
-function atualizarAviso(){
-  const nome = document.getElementById("nome").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-  const dataSelecionada = dataInput.value;
-  const avisoDiv = document.getElementById("mensagemAviso");
-  avisoDiv.innerHTML = "";
-  document.getElementById("btnAgendar").disabled = false;
-
-  if(nome || telefone){
-    const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nome || a.telefone===telefone));
-    if(agendamentoHoje){
-      avisoDiv.innerHTML = `⚠️ Você já tem um horário agendado hoje às ${agendamentoHoje.horario}`;
-      document.getElementById("btnAgendar").disabled = true;
-    }
-  }
-}
-
-// atualizar painel do dono
-function atualizarPainel(){
-  const tbody = document.querySelector("#tabelaAgendamentos tbody");
-  tbody.innerHTML = "";
-  agendamentos.forEach((a,index)=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${a.nome}</td>
-      <td>${a.telefone}</td>
-      <td>${a.endereco}</td>
-      <td>${a.servico}</td>
-      <td>${a.data}</td>
-      <td>${a.horario}</td>
-      <td><button class="cancelar" onclick="cancelar(${index})">Cancelar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-// cancelar agendamento
-function cancelar(index){
-  if(confirm("Deseja realmente cancelar este agendamento?")){
-    agendamentos.splice(index,1);
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-    gerarHorarios();
-    atualizarAviso();
-    atualizarPainel();
-  }
-}
-
-// listeners
-dataInput.addEventListener("change", ()=>{ gerarHorarios(); atualizarAviso(); });
-document.getElementById("nome").addEventListener("input", atualizarAviso);
-document.getElementById("telefone").addEventListener("input", atualizarAviso);
-
-// função agendar
-function agendar(){
-  const nome = document.getElementById("nome").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-  const endereco = document.getElementById("endereco").value.trim();
+function enviarAgendamento() {
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
   const servico = document.getElementById("servico").value;
+  const data = document.getElementById("data").value;
   const horario = document.getElementById("horario").value;
-  const data = dataInput.value;
 
-  if(!nome || !telefone || !endereco || !servico || !horario || !data){
+  if(!nome || !telefone || !data){
     alert("Preencha todos os campos!");
     return;
   }
 
-  if(agendamentos.find(a=>a.data===data && a.horario===horario)){
-    alert("Horário ocupado! Escolha outro.");
-    return;
-  }
-
-  agendamentos.push({nome, telefone, endereco, servico, horario, data});
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-  
-  gerarHorarios(); 
-  atualizarAviso();
-  atualizarPainel();
-
-  // animação ✅ gigante
-  const conf = document.getElementById("confirmacao");
-  conf.style.display = "block";
-  conf.style.transform = "translate(-50%, -50%) scale(0)";
-  setTimeout(() => { conf.style.transform = "translate(-50%, -50%) scale(1.5)"; }, 50);
-  setTimeout(() => {
-    conf.style.transform = "translate(-50%, -50%) scale(0)";
-    setTimeout(()=>{ conf.style.display = "none"; },500);
-  }, 2000);
-
-  // notificação para você
-  if(Notification.permission === "granted"){
-    new Notification("Novo agendamento!", {
-      body: `Cliente: ${nome}\nServiço: ${servico}\nData: ${data}\nHorário: ${horario}`
-    });
-  }
+  // Aqui vamos salvar no Google Sheets depois
+  // Por enquanto só mostra confirmação
+  document.getElementById("confirmacao").innerHTML = "✅ Agendamento feito com sucesso!";
 }
-
-// senha simples para mostrar painel (só você)
-const senhaPainel = "lucas123"; // coloque a senha que quiser
-let senha = prompt("Digite a senha do dono para ver o painel de agendamentos:");
-if(senha === senhaPainel){
-  document.getElementById("painel").style.display = "block";
-  atualizarPainel();
-}
-
-// inicialização
-gerarHorarios();
-atualizarAviso();
 </script>
+
 </body>
 </html>

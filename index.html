@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,7 +14,9 @@ button {background:#0b8457; color:white; font-weight:bold; border:none; cursor:p
 button:hover {background:#065a3d;}
 h3 {text-align:center;}
 hr {margin:15px 0;}
-.agendamento {background:#f9f9f9; padding:8px; margin-bottom:5px; border-radius:5px;}
+.agendamento {background:#f9f9f9; padding:8px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;}
+.aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold;}
+.agendamento span {color:green; font-weight:bold;}
 </style>
 </head>
 <body>
@@ -22,6 +25,8 @@ hr {margin:15px 0;}
 
 <div class="container" id="agendamentoContainer">
 <h3>Agendar Serviço</h3>
+
+<div id="mensagemAviso"></div>
 
 <input id="nome" placeholder="Nome do cliente">
 <input id="telefone" placeholder="Telefone">
@@ -40,7 +45,7 @@ hr {margin:15px 0;}
   <option value="" disabled selected>Escolha o horário</option>
 </select>
 
-<button onclick="agendar()">Agendar</button>
+<button id="btnAgendar" onclick="agendar()">Agendar</button>
 <hr>
 <button onclick="mostrarLogin()">Painel do Barbeiro</button>
 
@@ -90,7 +95,7 @@ function atualizarLista(){
   agendamentos.forEach((a)=>{
     const el = document.createElement("div");
     el.className="agendamento";
-    el.textContent = `${a.data} ${a.horario} - ${a.nome} | ${a.servico} | ${a.telefone} | ${a.endereco}`;
+    el.innerHTML = `${a.data} ${a.horario} - ${a.nome} | ${a.servico} <span>✅ Agendado</span>`;
     div.appendChild(el);
   });
 
@@ -98,6 +103,20 @@ function atualizarLista(){
   const select = document.getElementById("horario");
   gerarHorarios();
   const dataSelecionada = document.getElementById("data").value;
+  const nomeCliente = document.getElementById("nome").value.trim();
+  const telefoneCliente = document.getElementById("telefone").value.trim();
+  const avisoDiv = document.getElementById("mensagemAviso");
+  avisoDiv.innerHTML = "";
+  document.getElementById("btnAgendar").disabled = false;
+
+  // verificar se cliente já agendou naquele dia
+  const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nomeCliente || a.telefone===telefoneCliente));
+  if(agendamentoHoje){
+    avisoDiv.innerHTML = `⚠️ Você já tem um horário agendado hoje às ${agendamentoHoje.horario}`;
+    document.getElementById("btnAgendar").disabled = true;
+  }
+
+  // bloquear horários ocupados
   agendamentos.forEach(a=>{
     if(a.data === dataSelecionada){
       const option = select.querySelector(`option[value='${a.horario}']`);
@@ -111,6 +130,8 @@ function atualizarLista(){
 
 // quando a data muda, atualizar horários
 document.getElementById("data").addEventListener("change", atualizarLista);
+document.getElementById("nome").addEventListener("input", atualizarLista);
+document.getElementById("telefone").addEventListener("input", atualizarLista);
 
 // agendar
 function agendar(){
@@ -135,7 +156,7 @@ function agendar(){
   agendamentos.push(agendamento);
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
   atualizarLista();
-  alert("Agendamento confirmado!");
+  alert("Agendamento confirmado ✅!");
 }
 
 // mostrar login

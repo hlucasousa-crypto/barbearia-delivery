@@ -16,11 +16,23 @@ hr {margin:15px 0;}
 .agendamento {background:#f9f9f9; padding:8px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;}
 .agendamento span {color:green; font-weight:bold;}
 .aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold;}
+/* animação do ✅ */
+#confirmacao {
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%) scale(0);
+    font-size:100px;
+    color:green;
+    z-index:9999;
+    transition: transform 0.5s ease;
+}
 </style>
 </head>
 <body>
 
-<header>Lucas Barbearia Delivery 💈</header>
+<header>Lucas Barbearia Delivery</header>
 
 <div class="container" id="agendamentoContainer">
 <h3>Agendar Serviço</h3>
@@ -33,10 +45,10 @@ hr {margin:15px 0;}
 
 <select id="servico">
   <option value="" disabled selected>Escolha o serviço</option>
-  <option value="Corte">💇‍♂️ Corte - R$35</option>
-  <option value="Corte e Barba">💇‍♂️✂️ Corte e Barba - R$55</option>
-  <option value="Corte e Sobrancelha">💇‍♂️👁 Corte e Sobrancelha - R$40</option>
-  <option value="Corte, Barba e Sobrancelha">💇‍♂️✂️👁 Corte, Barba e Sobrancelha - R$65</option>
+  <option value="Corte">Corte - R$35</option>
+  <option value="Corte e Barba">Corte e Barba - R$55</option>
+  <option value="Corte e Sobrancelha">Corte e Sobrancelha - R$40</option>
+  <option value="Corte, Barba e Sobrancelha">Corte, Barba e Sobrancelha - R$65</option>
 </select>
 
 <input type="date" id="data" min="">
@@ -56,11 +68,14 @@ hr {margin:15px 0;}
 </div>
 </div>
 
+<!-- container do ✅ gigante -->
+<div id="confirmacao">✅</div>
+
 <script>
 // senha do barbeiro
 const SENHA = "1234";
 
-// definir data mínima para hoje
+// data mínima para hoje
 document.getElementById("data").valueAsDate = new Date();
 document.getElementById("data").min = new Date().toISOString().split("T")[0];
 
@@ -87,6 +102,8 @@ function gerarHorarios() {
 function atualizarLista(){
   const div = document.getElementById("listaAgendamentos");
   div.innerHTML = "";
+
+  // painel do barbeiro sempre mostra todos os agendamentos
   agendamentos.sort((a,b)=>{
     return a.data.localeCompare(b.data) || a.horario.localeCompare(b.horario);
   });
@@ -156,7 +173,16 @@ function agendar(){
   agendamentos.push(agendamento);
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
   atualizarLista();
-  alert("Agendamento confirmado ✅!");
+
+  // animação de confirmação
+  const conf = document.getElementById("confirmacao");
+  conf.style.display = "block";
+  conf.style.transform = "translate(-50%, -50%) scale(0)";
+  setTimeout(() => { conf.style.transform = "translate(-50%, -50%) scale(1.5)"; }, 50);
+  setTimeout(() => {
+    conf.style.transform = "translate(-50%, -50%) scale(0)";
+    setTimeout(() => { conf.style.display = "none"; }, 500);
+  }, 2000);
 }
 
 // mostrar painel do barbeiro
@@ -178,7 +204,6 @@ function acessarPainel(){
 // gerar horários e atualizar lista ao carregar
 gerarHorarios();
 atualizarLista();
-
 </script>
 </body>
 </html>

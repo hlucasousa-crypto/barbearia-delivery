@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lucas Barbearia Delivery</title>
+<title>💈 Lucas Barbearia Delivery</title>
 <style>
 body {font-family: Arial, sans-serif; background: #e0e0e0; margin:0; padding:0;}
 header {background:#1f1f2e; color:white; text-align:center; padding:25px; font-size:24px; font-weight:bold;}
@@ -20,7 +20,7 @@ option.ocupado {color:#aaa;}
 </head>
 <body>
 
-<header>Lucas Barbearia Delivery</header>
+<header>💈 Lucas Barbearia Delivery</header>
 
 <div class="container">
 <h3>Agendar Serviço</h3>
@@ -53,38 +53,47 @@ option.ocupado {color:#aaa;}
 // carregar agendamentos do localStorage
 let agendamentos = JSON.parse(localStorage.getItem("agendamentos") || "[]");
 
+// pedir permissão de notificação
+if (Notification.permission !== "granted") {
+  Notification.requestPermission();
+}
+
 // definir data mínima para hoje
-document.getElementById("data").valueAsDate = new Date();
-document.getElementById("data").min = new Date().toISOString().split("T")[0];
+const dataInput = document.getElementById("data");
+dataInput.valueAsDate = new Date();
+dataInput.min = new Date().toISOString().split("T")[0];
 
 // gerar horários das 7:00 até 21:00 com intervalos de 40 min
-function gerarHorarios() {
+function gerarHorarios(){
   const select = document.getElementById("horario");
   select.innerHTML = '<option value="" disabled selected>Escolha o horário</option>';
+
+  const dataSelecionada = dataInput.value;
   let hora = 7;
   let min = 0;
+
   while(hora<21 || (hora===21 && min===0)){
     const h = hora.toString().padStart(2,'0');
     const m = min.toString().padStart(2,'0');
     const horarioStr = `${h}:${m}`;
 
-    const ocupado = agendamentos.some(a=>a.data===document.getElementById("data").value && a.horario===horarioStr);
+    const ocupado = agendamentos.some(a => a.data === dataSelecionada && a.horario === horarioStr);
     if(ocupado){
-      select.innerHTML += `<option value="${horarioStr}" class="ocupado" disabled>${horarioStr} (Ocupado)</option>`;
+      select.innerHTML += `<option value="${horarioStr}" disabled class="ocupado">${horarioStr} (Ocupado)</option>`;
     } else {
       select.innerHTML += `<option value="${horarioStr}">${horarioStr}</option>`;
     }
 
     min += 40;
-    if(min>=60){ hora++; min -=60;}
+    if(min>=60){ hora++; min -=60; }
   }
 }
 
-// atualizar aviso de agendamento do mesmo cliente no dia
+// atualizar aviso se o cliente já tiver agendamento
 function atualizarAviso(){
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
-  const dataSelecionada = document.getElementById("data").value;
+  const dataSelecionada = dataInput.value;
   const avisoDiv = document.getElementById("mensagemAviso");
   avisoDiv.innerHTML = "";
   document.getElementById("btnAgendar").disabled = false;
@@ -99,21 +108,18 @@ function atualizarAviso(){
 }
 
 // listeners para atualizar horários e avisos
-document.getElementById("data").addEventListener("change", ()=>{
-  gerarHorarios();
-  atualizarAviso();
-});
+dataInput.addEventListener("change", ()=>{ gerarHorarios(); atualizarAviso(); });
 document.getElementById("nome").addEventListener("input", atualizarAviso);
 document.getElementById("telefone").addEventListener("input", atualizarAviso);
 
-// função de agendamento
+// função para agendar
 function agendar(){
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
   const endereco = document.getElementById("endereco").value.trim();
   const servico = document.getElementById("servico").value;
   const horario = document.getElementById("horario").value;
-  const data = document.getElementById("data").value;
+  const data = dataInput.value;
 
   if(!nome || !telefone || !endereco || !servico || !horario || !data){
     alert("Preencha todos os campos!");
@@ -127,7 +133,8 @@ function agendar(){
 
   agendamentos.push({nome, telefone, endereco, servico, horario, data});
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-  gerarHorarios();
+  
+  gerarHorarios(); // atualizar horários com os novos ocupados
   atualizarAviso();
 
   // animação ✅ gigante
@@ -139,7 +146,19 @@ function agendar(){
     conf.style.transform = "translate(-50%, -50%) scale(0)";
     setTimeout(()=>{ conf.style.display = "none"; },500);
   }, 2000);
+
+  // notificação do navegador para você
+  if(Notification.permission === "granted"){
+    new Notification("Novo agendamento!", {
+      body: `Cliente: ${nome}\nServiço: ${servico}\nData: ${data}\nHorário: ${horario}`,
+      icon: "https://i.imgur.com/1A3vL0G.png" // opcional, ícone do seu negócio
+    });
+  }
 }
+
+// gerar horários ao carregar página
+gerarHorarios();
+atualizarAviso();
 </script>
 </body>
 </html>

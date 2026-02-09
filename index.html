@@ -12,11 +12,9 @@ input, select, button {width:100%; padding:12px; margin-top:10px; font-size:16px
 button {background:#0b8457; color:white; font-weight:bold; border:none; cursor:pointer; transition:0.3s;}
 button:hover {background:#065a3d;}
 h3 {text-align:center;}
-hr {margin:15px 0;}
-.aviso {background:#ffcc00; padding:10px; margin:10px 0; border-radius:6px; color:#333; font-weight:bold; text-align:center;}
 option.ocupado {color:#aaa;}
 #confirmacao {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); font-size:100px; color:green; z-index:9999; transition: transform 0.5s ease;}
-#painel {display:none; max-width:800px; margin:20px auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 15px #aaa;}
+#painel {display:block; max-width:800px; margin:20px auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 15px #aaa;}
 table {width:100%; border-collapse:collapse;}
 th, td {padding:10px; border:1px solid #ccc; text-align:left;}
 th {background:#1f1f2e; color:white;}
@@ -194,23 +192,16 @@ function agendar(){
   }, 2000);
 
   // enviar mensagem para seu WhatsApp
-  const numeroWhatsApp = "55179827662"; // coloque seu número com DDD
+  const numeroWhatsApp = "5517992239338"; // SEU NÚMERO
   const mensagem = `Novo agendamento!\nCliente: ${nome}\nTelefone: ${telefone}\nEndereço: ${endereco}\nServiço: ${servico}\nData: ${data}\nHorário: ${horario}`;
   const urlWhats = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhats, "_blank");
 }
 
-// senha simples para mostrar painel (só você)
-const senhaPainel = "lucas123"; // coloque a senha que quiser
-let senha = prompt("Digite a senha do dono para ver o painel de agendamentos:");
-if(senha === senhaPainel){
-  document.getElementById("painel").style.display = "block";
-  atualizarPainel();
-}
-
 // inicialização
 gerarHorarios();
 atualizarAviso();
+atualizarPainel();
 </script>
 </body>
 </html>

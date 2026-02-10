@@ -1,207 +1,77 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💈 Lucas Barbearia Delivery</title>
-<style>
-body {font-family: Arial, sans-serif; background: #e0e0e0; margin:0; padding:0;}
-header {background:#1f1f2e; color:white; text-align:center; padding:25px; font-size:24px; font-weight:bold;}
-.container {max-width:500px; background:white; margin:30px auto; padding:20px; border-radius:10px; box-shadow:0 0 15px #aaa;}
-input, select, button {width:100%; padding:12px; margin-top:10px; font-size:16px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;}
-button {background:#0b8457; color:white; font-weight:bold; border:none; cursor:pointer; transition:0.3s;}
-button:hover {background:#065a3d;}
-h3 {text-align:center;}
-option.ocupado {color:#aaa;}
-#confirmacao {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); font-size:100px; color:green; z-index:9999; transition: transform 0.5s ease;}
-#painel {display:block; max-width:800px; margin:20px auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 15px #aaa;}
-table {width:100%; border-collapse:collapse;}
-th, td {padding:10px; border:1px solid #ccc; text-align:left;}
-th {background:#1f1f2e; color:white;}
-.cancelar {background:#d9534f; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;}
-.cancelar:hover {background:#a94442;}
-</style>
-</head>
-<body>
-
-<header>💈 Lucas Barbearia Delivery</header>
-
-<div class="container">
-<h3>Agendar Serviço</h3>
-
-<div id="mensagemAviso"></div>
-
-<input id="nome" placeholder="Nome do cliente">
-<input id="telefone" placeholder="Telefone">
-<input id="endereco" placeholder="Endereço">
-
-<select id="servico">
-  <option value="" disabled selected>Escolha o serviço</option>
-  <option value="Corte">Corte - R$35</option>
-  <option value="Corte e Barba">Corte e Barba - R$55</option>
-  <option value="Corte e Sobrancelha">Corte e Sobrancelha - R$40</option>
-  <option value="Corte, Barba e Sobrancelha">Corte, Barba e Sobrancelha - R$65</option>
-</select>
-
-<input type="date" id="data" min="">
-<select id="horario">
-  <option value="" disabled selected>Escolha o horário</option>
-</select>
-
-<button id="btnAgendar" onclick="agendar()">Agendar</button>
-</div>
-
-<div id="confirmacao">✅</div>
-
-<!-- Painel do dono -->
-<div id="painel">
-<h3>Painel de Agendamentos</h3>
-<table id="tabelaAgendamentos">
-<thead>
-<tr>
-<th>Cliente</th>
-<th>Telefone</th>
-<th>Endereço</th>
-<th>Serviço</th>
-<th>Data</th>
-<th>Horário</th>
-<th>Ação</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
-
-<script>
-// carregar agendamentos
-let agendamentos = JSON.parse(localStorage.getItem("agendamentos") || "[]");
-
-// definir data mínima
-const dataInput = document.getElementById("data");
-dataInput.valueAsDate = new Date();
-dataInput.min = new Date().toISOString().split("T")[0];
-
-// gerar horários
-function gerarHorarios(){
-  const select = document.getElementById("horario");
-  select.innerHTML = '<option value="" disabled selected>Escolha o horário</option>';
-  const dataSelecionada = dataInput.value;
-  let hora = 7, min = 0;
-
-  while(hora<21 || (hora===21 && min===0)){
-    const h = hora.toString().padStart(2,'0');
-    const m = min.toString().padStart(2,'0');
-    const horarioStr = `${h}:${m}`;
-    const ocupado = agendamentos.some(a => a.data === dataSelecionada && a.horario === horarioStr);
-    if(ocupado){
-      select.innerHTML += `<option value="${horarioStr}" disabled class="ocupado">${horarioStr} (Ocupado)</option>`;
-    } else {
-      select.innerHTML += `<option value="${horarioStr}">${horarioStr}</option>`;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💈 Barbearia Premium | Corte, Barba & Estilo</title>
+  <meta name="description" content="Barbearia Premium – cortes modernos, barba, sobrancelha e atendimento profissional. Agende pelo WhatsApp." />
+  <meta name="keywords" content="barbearia, corte masculino, barba, degradê, barbearia delivery" />
+  <meta name="author" content="Lucas Sousa Souza" />  <!-- Google Fonts -->  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">  <!-- Ícones -->  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">  <style>
+    :root {
+      --preto: #0f0f0f;
+      --cinza: #1c1c1c;
+      --dourado: #caa54d;
+      --branco: #ffffff;
     }
-    min += 40;
-    if(min>=60){ hora++; min -=60; }
-  }
-}
 
-// atualizar aviso do cliente
-function atualizarAviso(){
-  const nome = document.getElementById("nome").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-  const dataSelecionada = dataInput.value;
-  const avisoDiv = document.getElementById("mensagemAviso");
-  avisoDiv.innerHTML = "";
-  document.getElementById("btnAgendar").disabled = false;
-  if(nome || telefone){
-    const agendamentoHoje = agendamentos.find(a=>a.data===dataSelecionada && (a.nome===nome || a.telefone===telefone));
-    if(agendamentoHoje){
-      avisoDiv.innerHTML = `⚠️ Você já tem um horário agendado hoje às ${agendamentoHoje.horario}`;
-      document.getElementById("btnAgendar").disabled = true;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--preto);
+      color: var(--branco);
+      scroll-behavior: smooth;
     }
-  }
-}
 
-// atualizar painel do dono
-function atualizarPainel(){
-  const tbody = document.querySelector("#tabelaAgendamentos tbody");
-  tbody.innerHTML = "";
-  agendamentos.forEach((a,index)=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${a.nome}</td>
-      <td>${a.telefone}</td>
-      <td>${a.endereco}</td>
-      <td>${a.servico}</td>
-      <td>${a.data}</td>
-      <td>${a.horario}</td>
-      <td><button class="cancelar" onclick="cancelar(${index})">Cancelar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+    header {
+      background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
 
-// cancelar agendamento
-function cancelar(index){
-  if(confirm("Deseja realmente cancelar este agendamento?")){
-    agendamentos.splice(index,1);
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-    gerarHorarios();
-    atualizarAviso();
-    atualizarPainel();
-  }
-}
+    header h1 {
+      font-size: 3rem;
+      color: var(--dourado);
+    }
 
-// listeners
-dataInput.addEventListener("change", ()=>{ gerarHorarios(); atualizarAviso(); });
-document.getElementById("nome").addEventListener("input", atualizarAviso);
-document.getElementById("telefone").addEventListener("input", atualizarAviso);
+    header p {
+      margin: 15px 0;
+      font-size: 1.2rem;
+    }
 
-// função agendar
-function agendar(){
-  const nome = document.getElementById("nome").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-  const endereco = document.getElementById("endereco").value.trim();
-  const servico = document.getElementById("servico").value;
-  const horario = document.getElementById("horario").value;
-  const data = dataInput.value;
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: var(--dourado);
+      color: var(--preto);
+      font-weight: 600;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: .3s;
+    }
 
-  if(!nome || !telefone || !endereco || !servico || !horario || !data){
-    alert("Preencha todos os campos!");
-    return;
-  }
+    .btn:hover { background: #e0c36b; }
 
-  if(agendamentos.find(a=>a.data===data && a.horario===horario)){
-    alert("Horário ocupado! Escolha outro.");
-    return;
-  }
+    section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
 
-  agendamentos.push({nome, telefone, endereco, servico, horario, data});
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-  
-  gerarHorarios(); 
-  atualizarAviso();
-  atualizarPainel();
+    .titulo {
+      text-align: center;
+      margin-bottom: 50px;
+    }
 
-  // animação ✅ gigante
-  const conf = document.getElementById("confirmacao");
-  conf.style.display = "block";
-  conf.style.transform = "translate(-50%, -50%) scale(0)";
-  setTimeout(() => { conf.style.transform = "translate(-50%, -50%) scale(1.5)"; }, 50);
-  setTimeout(() => {
-    conf.style.transform = "translate(-50%, -50%) scale(0)";
-    setTimeout(()=>{ conf.style.display = "none"; },500);
-  }, 2000);
+    .titulo h2 {
+      font-size: 2.5rem;
+      color: var(--dourado);
+    }
 
-  // enviar mensagem para seu WhatsApp
-  const numeroWhatsApp = "5517992239338"; // SEU NÚMERO
-  const mensagem = `Novo agendamento!\nCliente: ${nome}\nTelefone: ${telefone}\nEndereço: ${endereco}\nServiço: ${servico}\nData: ${data}\nHorário: ${horario}`;
-  const urlWhats = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhats, "_blank");
-}
-
-// inicialização
-gerarHorarios();
-atualizarAviso();
-atualizarPainel();
-</script>
-</body>
-</html>
+    .serv

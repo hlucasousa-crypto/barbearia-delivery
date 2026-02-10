@@ -2,89 +2,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💈 Lucas Barbeiro Delivery | Empresa Premium Barretos</title>
-<meta name="description" content="Lucas Barbeiro Delivery – atendimento premium em Barretos. Corte, barba, planos mensais, agendamento inteligente e barbearia delivery profissional."><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>💈 Lucas Barbeiro Delivery | Barretos</title>
+<meta name="description" content="Lucas Barbeiro Delivery em Barretos. Corte, barba, sobrancelha e combos premium com atendimento delivery. Agende pelo WhatsApp."><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><style>
 :root{
---bg:#0b0b0b;
+--bg:#0a0a0a;
 --bg2:#141414;
 --gold:#d4af37;
---gold2:#f5d76e;
+--gold2:#f7d774;
 --white:#ffffff;
---gray:#bdbdbd;
+--gray:#cfcfcf;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--white)}
+body{font-family:'Poppins',sans-serif;background:radial-gradient(circle at top,#111,#000);color:var(--white)}
 
 /* NAV */
 nav{
 position:fixed;top:0;left:0;width:100%;z-index:1000;
-background:rgba(0,0,0,.85);backdrop-filter:blur(10px);
-display:flex;justify-content:space-between;align-items:center;padding:15px 30px
+background:rgba(0,0,0,.75);backdrop-filter:blur(12px);
+display:flex;justify-content:space-between;align-items:center;padding:18px 35px
 }
-nav h2{color:var(--gold)}
-nav ul{display:flex;gap:25px;list-style:none}
+nav h2{color:var(--gold);font-weight:800;letter-spacing:1px}
+nav ul{display:flex;gap:28px;list-style:none}
 nav a{color:var(--white);text-decoration:none;font-weight:500;transition:.3s}
 nav a:hover{color:var(--gold)}
 
 /* HERO */
 .hero{
-height:100vh;
-background:linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a');
+min-height:100vh;
+background:linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.85)),url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a');
 background-size:cover;background-position:center;
 display:flex;align-items:center;justify-content:center;text-align:center;padding:20px
 }
-.hero h1{font-size:3.5rem;color:var(--gold)}
-.hero p{font-size:1.3rem;margin:20px 0;color:var(--gray)}
+.hero h1{font-size:3.6rem;color:var(--gold);font-weight:800}
+.hero p{font-size:1.4rem;margin:20px 0;color:var(--gray)}
 
 .btn{
-display:inline-block;padding:16px 40px;border-radius:50px;
+display:inline-block;padding:17px 42px;border-radius:60px;
 background:linear-gradient(135deg,var(--gold),var(--gold2));
-color:#000;font-weight:700;text-decoration:none;transition:.3s
+color:#000;font-weight:800;text-decoration:none;transition:.3s;box-shadow:0 10px 30px rgba(212,175,55,.4)
 }
-.btn:hover{transform:scale(1.07)}
+.btn:hover{transform:scale(1.08)}
 
-section{max-width:1300px;margin:auto;padding:100px 20px}
+section{max-width:1300px;margin:auto;padding:110px 20px}
 .title{text-align:center;margin-bottom:70px}
-.title h2{font-size:2.8rem;color:var(--gold)}
+.title h2{font-size:2.9rem;color:var(--gold);font-weight:800}
 .title p{color:var(--gray)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:35px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:40px}
 .card{
-background:var(--bg2);padding:35px;border-radius:30px;
-text-align:center;transition:.4s
+background:linear-gradient(180deg,#151515,#0f0f0f);
+padding:38px;border-radius:35px;
+text-align:center;transition:.4s;box-shadow:0 20px 40px rgba(0,0,0,.6)
 }
-.card:hover{transform:translateY(-15px)}
-.card i{font-size:2.8rem;color:var(--gold);margin-bottom:20px}
-.card span{display:block;margin-top:15px;font-size:1.4rem;color:var(--gold);font-weight:700}
+.card:hover{transform:translateY(-18px)}
+.card i{font-size:3rem;color:var(--gold);margin-bottom:20px}
+.card span{display:block;margin-top:18px;font-size:1.5rem;color:var(--gold);font-weight:800}
 
 /* ABOUT */
-.about{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
-.about img{width:100%;border-radius:30px}
-.about p{line-height:1.9;color:var(--gray)}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about img{width:100%;border-radius:35px;box-shadow:0 20px 50px rgba(0,0,0,.7)}
+.about p{line-height:2;color:var(--gray);font-size:1.05rem}
 
-/* TIMELINE */
-.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}
-.timeline div{background:var(--bg2);padding:30px;border-left:5px solid var(--gold);border-radius:20px}
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:35px}
+.steps div{background:var(--bg2);padding:35px;border-radius:30px;border-top:4px solid var(--gold)}
 
 /* CTA */
 .cta{
 background:linear-gradient(135deg,var(--gold),var(--gold2));
-color:#000;text-align:center;border-radius:40px;padding:70px 20px
+color:#000;text-align:center;border-radius:50px;padding:80px 20px;box-shadow:0 30px 60px rgba(212,175,55,.5)
 }
-.cta h2{font-size:2.5rem}
-.cta p{margin:20px 0;font-weight:500}
+.cta h2{font-size:2.6rem;font-weight:800}
+.cta p{margin:22px 0;font-weight:600}
 
 /* FOOTER */
-footer{background:#000;text-align:center;padding:50px 20px;color:var(--gray)}
-footer i{color:var(--gold);font-size:1.6rem;margin:0 12px}
+footer{background:#000;text-align:center;padding:55px 20px;color:var(--gray)}
+footer i{color:var(--gold);font-size:1.7rem;margin:0 14px}
 
-/* WHATS */
+/* WHATSAPP */
 .whatsapp{
-position:fixed;bottom:25px;right:25px;
+position:fixed;bottom:28px;right:28px;
 background:#25d366;color:#fff;
-font-size:2.2rem;padding:16px 19px;border-radius:50%;z-index:2000
+font-size:2.3rem;padding:17px 20px;border-radius:50%;z-index:2000;box-shadow:0 10px 25px rgba(0,0,0,.6)
 }
 
 @media(max-width:900px){
@@ -98,58 +99,50 @@ nav ul{display:none}
 <ul>
 <li><a href="#home">Início</a></li>
 <li><a href="#services">Serviços</a></li>
-<li><a href="#plans">Planos</a></li>
 <li><a href="#about">Sobre</a></li>
 <li><a href="#contact">Contato</a></li>
 </ul>
 </nav><section class="hero" id="home">
 <div>
 <h1>Lucas Barbeiro Delivery</h1>
-<p>Empresa premium de barbearia delivery em Barretos/SP</p>
-<a class="btn" href="https://wa.me/5599999999999?text=Olá%20quero%20agendar%20um%20horário%20delivery" target="_blank">Agendar Agora</a>
+<p>Barbearia premium delivery em Barretos/SP</p>
+<a class="btn" href="https://wa.me/5517992239338?text=Olá%20quero%20agendar%20um%20horário%20delivery" target="_blank">Agendar pelo WhatsApp</a>
 </div>
 </section><section id="services">
-<div class="title"><h2>Serviços Premium</h2><p>Atendimento profissional na sua casa</p></div>
+<div class="title"><h2>Serviços</h2><p>Qualidade profissional no conforto da sua casa</p></div>
 <div class="grid">
-<div class="card"><i class="fa-solid fa-scissors"></i><h3>Corte Masculino</h3><span>R$ 40</span></div>
-<div class="card"><i class="fa-solid fa-user"></i><h3>Barba Premium</h3><span>R$ 35</span></div>
-<div class="card"><i class="fa-solid fa-star"></i><h3>Corte + Barba</h3><span>R$ 70</span></div>
-<div class="card"><i class="fa-solid fa-house"></i><h3>Delivery Completo</h3><span>Incluso</span></div>
-</div>
-</section><section id="plans">
-<div class="title"><h2>Planos Mensais</h2><p>Clientes fixos, prioridade e economia</p></div>
-<div class="grid">
-<div class="card"><h3>Básico</h3><p>2 atendimentos/mês</p><span>R$ 80</span></div>
-<div class="card"><h3>Premium</h3><p>4 atendimentos/mês</p><span>R$ 140</span></div>
-<div class="card"><h3>VIP Delivery</h3><p>Ilimitado + prioridade</p><span>R$ 220</span></div>
+<div class="card"><i class="fa-solid fa-scissors"></i><h3>Corte Masculino</h3><span>R$ 35</span></div>
+<div class="card"><i class="fa-solid fa-user"></i><h3>Barba</h3><span>R$ 25</span></div>
+<div class="card"><i class="fa-solid fa-star"></i><h3>Barba + Cabelo</h3><span>R$ 55</span></div>
+<div class="card"><i class="fa-solid fa-gem"></i><h3>Barba + Cabelo + Sobrancelha</h3><span>R$ 65</span></div>
 </div>
 </section><section id="about">
-<div class="title"><h2>Sobre a Empresa</h2><p>Profissionalismo, conforto e exclusividade</p></div>
+<div class="title"><h2>Sobre</h2><p>Atendimento exclusivo e profissional</p></div>
 <div class="about">
 <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186">
 <p>
-Sou Lucas, barbeiro profissional em Barretos, especializado exclusivamente em atendimento delivery.
-Levo uma experiência premium até você, com higiene, pontualidade e alto padrão de acabamento.
-Atendo clientes exigentes que valorizam tempo, conforto e qualidade.
+Sou Lucas, barbeiro profissional em Barretos, especializado em atendimento delivery.
+Levo até você uma experiência completa de barbearia premium, com conforto, higiene e atenção aos detalhes.
+Ideal para quem quer qualidade sem sair de casa.
 </p>
 </div>
 </section><section>
-<div class="title"><h2>Como Funciona</h2><p>Simples, rápido e profissional</p></div>
-<div class="timeline">
-<div><h3>1️⃣ Agendamento</h3><p>Você agenda pelo WhatsApp ou site</p></div>
-<div><h3>2️⃣ Deslocamento</h3><p>Vou até seu endereço em Barretos</p></div>
-<div><h3>3️⃣ Atendimento</h3><p>Corte premium no conforto da sua casa</p></div>
-<div><h3>4️⃣ Fidelização</h3><p>Planos mensais com prioridade</p></div>
+<div class="title"><h2>Como Funciona</h2><p>Simples, rápido e seguro</p></div>
+<div class="steps">
+<div><h3>📲 Agendamento</h3><p>Você chama no WhatsApp e escolhe o horário</p></div>
+<div><h3>🏠 Deslocamento</h3><p>Vou até seu endereço em Barretos</p></div>
+<div><h3>💈 Atendimento</h3><p>Serviço premium no conforto da sua casa</p></div>
+<div><h3>⭐ Fidelização</h3><p>Clientes fixos têm prioridade</p></div>
 </div>
 </section><section class="cta" id="contact">
-<h2>Pronto para elevar seu visual?</h2>
-<p>Atendimento profissional delivery em Barretos</p>
-<a class="btn" href="https://wa.me/5599999999999?text=Olá%20quero%20agendar%20um%20horário%20delivery" target="_blank">Chamar no WhatsApp</a>
+<h2>Agende agora seu horário</h2>
+<p>Atendimento delivery profissional em Barretos</p>
+<a class="btn" href="https://wa.me/5517992239338?text=Olá%20quero%20agendar%20um%20horário%20delivery" target="_blank">Chamar no WhatsApp</a>
 </section><footer>
 <p>© 2026 Lucas Barbeiro Delivery • Barretos/SP</p>
 <a href="#"><i class="fab fa-instagram"></i></a>
 <a href="#"><i class="fab fa-whatsapp"></i></a>
-</footer><a class="whatsapp" href="https://wa.me/5599999999999?text=Olá%20quero%20agendar%20um%20horário%20delivery" target="_blank"><i class="fab fa-whatsapp"></i></a>
+</footer><a class="whatsapp" href="https://wa.me/5517992239338?text=Olá%20quero%20agendar%20um%20horário%20delivery" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 </body>
 </html>

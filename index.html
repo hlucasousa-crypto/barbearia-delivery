@@ -1,63 +1,202 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💈 Barbearia Premium</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💈 Barbearia Premium | Corte, Barba & Estilo</title>
+  <meta name="description" content="Barbearia Premium – cortes modernos, barba, sobrancelha e atendimento profissional. Agende pelo WhatsApp." />
+  <meta name="keywords" content="barbearia, corte masculino, barba, degradê, barbearia delivery" />
+  <meta name="author" content="Lucas Sousa Souza" />  <!-- Google Fonts -->  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">  <!-- Ícones -->  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">  <style>
+    :root {
+      --preto: #0f0f0f;
+      --cinza: #1c1c1c;
+      --dourado: #caa54d;
+      --branco: #ffffff;
+    }
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  <style>
     body {
-      margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #0f0f0f;
-      color: #ffffff;
-      text-align: center;
+      background: var(--preto);
+      color: var(--branco);
+      scroll-behavior: smooth;
     }
 
     header {
+      background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a');
+      background-size: cover;
+      background-position: center;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)),
-      url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a');
-      background-size: cover;
-      background-position: center;
+      text-align: center;
+      padding: 20px;
     }
 
-    h1 {
-      color: #caa54d;
+    header h1 {
       font-size: 3rem;
+      color: var(--dourado);
     }
 
-    p {
+    header p {
+      margin: 15px 0;
       font-size: 1.2rem;
     }
 
-    a {
+    .btn {
       display: inline-block;
       margin-top: 20px;
       padding: 15px 30px;
-      background: #caa54d;
-      color: #000;
-      text-decoration: none;
+      background: var(--dourado);
+      color: var(--preto);
+      font-weight: 600;
       border-radius: 30px;
+      text-decoration: none;
+      transition: .3s;
+    }
+
+    .btn:hover { background: #e0c36b; }
+
+    section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .titulo {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .titulo h2 {
+      font-size: 2.5rem;
+      color: var(--dourado);
+    }
+
+    .servicos, .planos, .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: var(--cinza);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      transition: .3s;
+    }
+
+    .card:hover { transform: translateY(-8px); }
+
+    .card i {
+      font-size: 2.5rem;
+      color: var(--dourado);
+      margin-bottom: 15px;
+    }
+
+    .card h3 { margin-bottom: 10px; }
+
+    .card span {
+      display: block;
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: var(--dourado);
       font-weight: bold;
     }
-  </style>
-</head>
 
-<body>
+    .galeria img {
+      width: 100%;
+      border-radius: 20px;
+    }
 
-<header>
-  <div>
-    <h1>💈 Barbearia Premium</h1>
-    <p>Estilo, atitude e precisão</p>
-    <a href="https://wa.me/5599999999999" target="_blank">Agendar no WhatsApp</a>
-  </div>
-</header>
+    .sobre {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .sobre img {
+      width: 100%;
+      border-radius: 20px;
+    }
+
+    .sobre p { line-height: 1.7; }
+
+    footer {
+      background: var(--cinza);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--dourado);
+      margin: 0 10px;
+      font-size: 1.5rem;
+    }
+
+    .whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      color: #fff;
+      padding: 15px 18px;
+      border-radius: 50%;
+      font-size: 2rem;
+      z-index: 999;
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.2rem; }
+      .sobre { grid-template-columns: 1fr; }
+    }
+  </style></head>
+<body>  <header>
+    <div>
+      <h1>💈 Barbearia Premium</h1>
+      <p>Estilo, atitude e precisão em cada corte</p>
+      <a class="btn" href="https://wa.me/5599999999999" target="_blank">Agendar no WhatsApp</a>
+    </div>
+  </header>  <section>
+    <div class="titulo"><h2>Serviços</h2></div>
+    <div class="servicos">
+      <div class="card"><i class="fa-solid fa-scissors"></i><h3>Corte Masculino</h3><span>R$ 30</span></div>
+      <div class="card"><i class="fa-solid fa-user"></i><h3>Barba Completa</h3><span>R$ 25</span></div>
+      <div class="card"><i class="fa-solid fa-star"></i><h3>Corte + Barba</h3><span>R$ 50</span></div>
+      <div class="card"><i class="fa-solid fa-child"></i><h3>Corte Infantil</h3><span>R$ 25</span></div>
+    </div>
+  </section>  <section>
+    <div class="titulo"><h2>Planos Mensais</h2></div>
+    <div class="planos">
+      <div class="card"><h3>Básico</h3><p>2 cortes/mês</p><span>R$ 60</span></div>
+      <div class="card"><h3>Premium</h3><p>4 cortes/mês</p><span>R$ 100</span></div>
+      <div class="card"><h3>VIP</h3><p>Cortes ilimitados</p><span>R$ 150</span></div>
+    </div>
+  </section>  <section>
+    <div class="titulo"><h2>Sobre Nós</h2></div>
+    <div class="sobre">
+      <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186" alt="Barbearia">
+      <p>
+        Somos uma barbearia moderna, focada em qualidade, higiene e atendimento diferenciado.
+        Trabalhamos com horário marcado, produtos profissionais e técnicas atualizadas.
+      </p>
+    </div>
+  </section>  <section>
+    <div class="titulo"><h2>Galeria</h2></div>
+    <div class="galeria">
+      <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
+      <img src="https://images.unsplash.com/photo-1622296089866-30f0c1a6b00a">
+      <img src="https://images.unsplash.com/photo-1593702295094-8ec7a5f97e5a">
+    </div>
+  </section>  <footer>
+    <p>© 2026 Barbearia Premium - Todos os direitos reservados</p>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-facebook"></i></a>
+    <a href="#"><i class="fab fa-whatsapp"></i></a>
+  </footer><a class="whatsapp" href="https://wa.me/5599999999999" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 </body>
 </html>

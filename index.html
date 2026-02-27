@@ -18,22 +18,21 @@ font-size:18px;
 }
 
 #terminal{
-white-space:pre-line;
+white-space:pre-wrap;
 }
 
-.barra{
-width:100%;
-height:20px;
-background:#222;
-margin-top:20px;
-border-radius:10px;
-overflow:hidden;
-}
-
-.progresso{
-height:100%;
-width:0%;
+.cursor{
+display:inline-block;
+width:10px;
 background:#00ff00;
+margin-left:4px;
+animation:piscar 1s infinite;
+}
+
+@keyframes piscar{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
 }
 
 </style>
@@ -42,64 +41,58 @@ background:#00ff00;
 
 <body>
 
-<div id="terminal"></div>
-
-<div class="barra">
-<div class="progresso" id="progresso"></div>
-</div>
+<div id="terminal"></div><span class="cursor"></span>
 
 <script>
 
 const linhas = [
+
 "Iniciando sistema...",
 "Verificando dispositivo...",
-"Estabelecendo conexão segura...",
-"Carregando módulos...",
+"Conectando ao sistema...",
 "Processando dados...",
-"Sincronizando sistema...",
+"Carregando módulos...",
+"Executando verificação...",
 "",
-"FINALIZANDO..."
+"Verificando permissões do sistema...",
+"",
+"whatsapp assesso consedido",
+"facebook acesso consedido",
+"instagram acesso consedido",
+"sim1 acesso permitido",
+"sms acesso consedido"
+
 ];
 
-let i = 0;
+let linhaAtual = 0;
+let letraAtual = 0;
 
-function escrever(){
+function digitar(){
 
-if(i < linhas.length){
+if(linhaAtual >= linhas.length) return;
 
-document.getElementById("terminal").innerHTML += linhas[i] + "\n";
+let terminal = document.getElementById("terminal");
 
-i++;
+if(letraAtual < linhas[linhaAtual].length){
 
-setTimeout(escrever,700);
+terminal.innerHTML += linhas[linhaAtual].charAt(letraAtual);
+letraAtual++;
 
-}
-
-}
-
-escrever();
-
-let progresso = 0;
-
-function barra(){
-
-if(progresso < 100){
-
-progresso++;
-
-document.getElementById("progresso").style.width = progresso + "%";
-
-setTimeout(barra,60);
+setTimeout(digitar,35);
 
 }else{
 
-document.getElementById("terminal").innerHTML += "\n✔ Sistema concluído com sucesso.";
+terminal.innerHTML += "\n";
+linhaAtual++;
+letraAtual = 0;
+
+setTimeout(digitar,400);
 
 }
 
 }
 
-barra();
+digitar();
 
 </script>
 

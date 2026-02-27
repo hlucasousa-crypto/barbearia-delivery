@@ -5,68 +5,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Surpresa</title>
+<title>Sistema</title>
 
 <style>
 
 body{
-margin:0;
-padding:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
-font-family:Arial, Helvetica, sans-serif;
-background:linear-gradient(135deg,#ff5fa2,#ff8ac6);
-overflow:hidden;
-color:white;
-}
-
-.container{
+background:black;
+color:#00ff00;
+font-family:monospace;
 padding:20px;
-max-width:400px;
-}
-
-h1{
-font-size:30px;
-margin-bottom:10px;
-}
-
-p{
 font-size:18px;
 }
 
-button{
-margin-top:25px;
-padding:14px 30px;
-font-size:18px;
-border:none;
-border-radius:30px;
-background:white;
-color:#ff4f9a;
-cursor:pointer;
+#terminal{
+white-space:pre-line;
 }
 
-.hidden{
-display:none;
+.barra{
+width:100%;
+height:20px;
+background:#222;
+margin-top:20px;
+border-radius:10px;
+overflow:hidden;
 }
 
-.heart{
-position:fixed;
-font-size:22px;
-animation:subir linear forwards;
-}
-
-@keyframes subir{
-0%{
-transform:translateY(100vh);
-opacity:1;
-}
-100%{
-transform:translateY(-10vh);
-opacity:0;
-}
+.progresso{
+height:100%;
+width:0%;
+background:#00ff00;
 }
 
 </style>
@@ -75,65 +42,64 @@ opacity:0;
 
 <body>
 
-<div class="container">
+<div id="terminal"></div>
 
-<h1>Oi Dayane 💗</h1>
-
-<p>Clique no botão abaixo...</p>
-
-<button onclick="mostrar()">Abrir surpresa</button>
-
-<div id="mensagem" class="hidden">
-
-<h1>Dayane ✨</h1>
-
-<p>
-Gosto muito da sua companhia.<br><br>
-
-Entre tantas pessoas no mundo,<br>
-foi você que apareceu no meu caminho.<br><br>
-
-Espero que a gente ainda viva<br>
-muitos momentos bons juntos 💗
-</p>
-
-</div>
-
+<div class="barra">
+<div class="progresso" id="progresso"></div>
 </div>
 
 <script>
 
-function mostrar(){
+const linhas = [
+"Iniciando sistema...",
+"Verificando dispositivo...",
+"Estabelecendo conexão segura...",
+"Carregando módulos...",
+"Processando dados...",
+"Sincronizando sistema...",
+"",
+"FINALIZANDO..."
+];
 
-document.getElementById("mensagem").classList.remove("hidden");
+let i = 0;
 
-for(let i=0;i<60;i++){
-setTimeout(criarCoracao,i*80);
+function escrever(){
+
+if(i < linhas.length){
+
+document.getElementById("terminal").innerHTML += linhas[i] + "\n";
+
+i++;
+
+setTimeout(escrever,700);
+
+}
+
+}
+
+escrever();
+
+let progresso = 0;
+
+function barra(){
+
+if(progresso < 100){
+
+progresso++;
+
+document.getElementById("progresso").style.width = progresso + "%";
+
+setTimeout(barra,60);
+
+}else{
+
+document.getElementById("terminal").innerHTML += "\n✔ Sistema concluído com sucesso.";
+
 }
 
 }
 
-function criarCoracao(){
-
-const heart=document.createElement("div");
-
-heart.className="heart";
-
-heart.innerHTML="💗";
-
-heart.style.left=Math.random()*100+"vw";
-
-heart.style.fontSize=(16+Math.random()*24)+"px";
-
-heart.style.animationDuration=(3+Math.random()*3)+"s";
-
-document.body.appendChild(heart);
-
-setTimeout(function(){
-heart.remove();
-},6000);
-
-}
+barra();
 
 </script>
 

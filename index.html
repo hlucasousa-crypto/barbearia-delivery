@@ -18,17 +18,18 @@ justify-content:center;
 align-items:center;
 text-align:center;
 font-family:Arial, Helvetica, sans-serif;
-background:linear-gradient(135deg,#ff4e8a,#ff9ac2);
+background:linear-gradient(135deg,#ff5fa2,#ff8ac6);
 overflow:hidden;
 color:white;
 }
 
 .container{
 padding:20px;
+max-width:400px;
 }
 
 h1{
-font-size:32px;
+font-size:30px;
 margin-bottom:10px;
 }
 
@@ -38,12 +39,12 @@ font-size:18px;
 
 button{
 margin-top:25px;
-padding:14px 28px;
+padding:14px 30px;
 font-size:18px;
 border:none;
 border-radius:30px;
 background:white;
-color:#ff4e8a;
+color:#ff4f9a;
 cursor:pointer;
 }
 
@@ -53,22 +54,19 @@ display:none;
 
 .heart{
 position:fixed;
-font-size:20px;
+font-size:22px;
 animation:subir linear forwards;
 }
 
 @keyframes subir{
-
 0%{
 transform:translateY(100vh);
 opacity:1;
 }
-
 100%{
 transform:translateY(-10vh);
 opacity:0;
 }
-
 }
 
 </style>
@@ -81,9 +79,9 @@ opacity:0;
 
 <h1>Oi Dayane 💗</h1>
 
-<p>Eu fiz algo simples, mas especial...</p>
+<p>Clique no botão abaixo...</p>
 
-<button onclick="abrir()">Abrir surpresa</button>
+<button onclick="mostrar()">Abrir surpresa</button>
 
 <div id="mensagem" class="hidden">
 
@@ -105,14 +103,12 @@ muitos momentos bons juntos 💗
 
 <script>
 
-function abrir(){
+function mostrar(){
 
 document.getElementById("mensagem").classList.remove("hidden");
 
-for(let i=0;i<50;i++){
-
+for(let i=0;i<60;i++){
 setTimeout(criarCoracao,i*80);
-
 }
 
 }
@@ -133,7 +129,7 @@ heart.style.animationDuration=(3+Math.random()*3)+"s";
 
 document.body.appendChild(heart);
 
-setTimeout(()=>{
+setTimeout(function(){
 heart.remove();
 },6000);
 

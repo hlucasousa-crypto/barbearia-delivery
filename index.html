@@ -1,101 +1,52 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sistema</title>
-
-<style>
-
-body{
-background:black;
-color:#00ff00;
-font-family:monospace;
-padding:20px;
-font-size:18px;
-}
-
-#terminal{
-white-space:pre-wrap;
-}
-
-.cursor{
-display:inline-block;
-width:10px;
-background:#00ff00;
-margin-left:4px;
-animation:piscar 1s infinite;
-}
-
-@keyframes piscar{
-0%{opacity:1;}
-50%{opacity:0;}
-100%{opacity:1;}
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planos Barbearia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 font-sans">  <div class="max-w-6xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold text-center mb-8">Planos Mensais</h1><div class="grid md:grid-cols-3 gap-6">
 
-<body>
+  <!-- Plano Básico -->
+  <div class="bg-white rounded-2xl shadow p-6 text-center">
+    <h2 class="text-xl font-semibold mb-2">Plano Básico</h2>
+    <p class="text-gray-500 mb-4">Para quem corta pouco</p>
+    <p class="text-3xl font-bold mb-4">R$60</p>
+    <ul class="text-gray-600 mb-6 space-y-2">
+      <li>✔ 2 cortes por mês</li>
+      <li>✔ Acabamento incluso</li>
+    </ul>
+    <button class="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800">Assinar</button>
+  </div>
 
-<div id="terminal"></div><span class="cursor"></span>
+  <!-- Plano Intermediário -->
+  <div class="bg-white rounded-2xl shadow p-6 text-center border-2 border-black">
+    <h2 class="text-xl font-semibold mb-2">Plano Premium</h2>
+    <p class="text-gray-500 mb-4">Mais escolhido</p>
+    <p class="text-3xl font-bold mb-4">R$120</p>
+    <ul class="text-gray-600 mb-6 space-y-2">
+      <li>✔ 4 cortes por mês</li>
+      <li>✔ Barba inclusa</li>
+      <li>✔ Sobrancelha</li>
+    </ul>
+    <button class="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800">Assinar</button>
+  </div>
 
-<script>
+  <!-- Plano Ilimitado -->
+  <div class="bg-white rounded-2xl shadow p-6 text-center">
+    <h2 class="text-xl font-semibold mb-2">Plano Ilimitado</h2>
+    <p class="text-gray-500 mb-4">Corte à vontade</p>
+    <p class="text-3xl font-bold mb-4">R$199</p>
+    <ul class="text-gray-600 mb-6 space-y-2">
+      <li>✔ Cortes ilimitados</li>
+      <li>✔ Barba ilimitada</li>
+      <li>✔ Prioridade no atendimento</li>
+    </ul>
+    <button class="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800">Assinar</button>
+  </div>
 
-const linhas = [
+</div>
 
-"Iniciando sistema...",
-"Verificando dispositivo...",
-"Conectando ao sistema...",
-"Processando dados...",
-"Carregando módulos...",
-"Executando verificação...",
-"",
-"Verificando permissões do sistema...",
-"",
-"whatsapp assesso consedido",
-"facebook acesso consedido",
-"instagram acesso consedido",
-"sim1 acesso permitido",
-"sms acesso consedido"
-
-];
-
-let linhaAtual = 0;
-let letraAtual = 0;
-
-function digitar(){
-
-if(linhaAtual >= linhas.length) return;
-
-let terminal = document.getElementById("terminal");
-
-if(letraAtual < linhas[linhaAtual].length){
-
-terminal.innerHTML += linhas[linhaAtual].charAt(letraAtual);
-letraAtual++;
-
-setTimeout(digitar,35);
-
-}else{
-
-terminal.innerHTML += "\n";
-linhaAtual++;
-letraAtual = 0;
-
-setTimeout(digitar,400);
-
-}
-
-}
-
-digitar();
-
-</script>
-
-</body>
-
+  </div></body>
 </html>
